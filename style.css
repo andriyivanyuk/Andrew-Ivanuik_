@@ -1,0 +1,122 @@
+/* reset styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+ul[class],
+ol[class] {
+  padding: 0;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+}
+
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  font-family: "Roboto", sans-serif;
+}
+a {
+  text-decoration: none;
+}
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.button {
+  outline: none;
+  box-shadow: none;
+}
+
+/* custom styles */
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 15px;
+    max-width: 150px;
+    position: relative;
+  }
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .movie-shell {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 25px;
+  }
+  .cards {
+      width: 70%;
+  }
+  .moovie-list {
+      width: 30%;
+  }
+
+/* .moovies-title {
+  text-align: left;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.moovie-cards {
+  display: flex;
+  flex-direction: row;
+  column-gap: 25px;
+  row-gap: 25px;
+  flex-wrap: wrap;
+  width: 85%;
+}
+
+.moovie-list {
+    margin-top: 25px;
+    width: 25%;
+}
+
+
+
+
+.name {
+    margin-top: 10px;
+}
+
+.main-star {
+    font-size: 30px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.favourite-list__item {
+  position: relative;
+} */
