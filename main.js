@@ -1,7 +1,7 @@
 //Variables
 const favListDOM = document.querySelector(".favourite-list");
 const favouriteItems = document.querySelector(".favourite-items");
-// const card = document.querySelector(".card");
+const favList = document.querySelector(".favourite-list");
 const cardsDOM = document.querySelector(".cards-wrapper");
 
 //Api
@@ -65,26 +65,42 @@ class UI {
       }
       button.addEventListener("click", (event) => {
         event.target.classList.toggle("favourite-color");
-        console.log(event.target);
         //Get movie from movies
         let movieItem = { ...Storage.getMovie(id), amount: 1 };
-
-        console.log(movieItem);
         //Add movie to favourite list
         if (event.target.classList.contains("favourite-color")) {
-          console.log("full array");
           favouriteList = [...favouriteList, movieItem];
+          //Save movie in local storage
+          Storage.saveFavouriteList(favouriteList);
+          // Set favourite list values
+          //  this.setMovieValues(cart);
+          //Display movie item
+          this.addFavouriteItem(movieItem);
         } else {
           console.log("empty array");
         }
-        console.log(event);
-        console.log(favouriteList);
-        //Save movie in local storage
-        Storage.saveFavouriteList(favouriteList);
-        // Set favourite list values
       });
     });
-    console.log(starButtons);
+  }
+  
+  addFavouriteItem(item) {
+    const listItem = document.createElement("li");
+    listItem.classList.add("favourite-list__item");
+    listItem.innerHTML = `
+        <i class="fa fa-star list-star"></i>
+        <span class="list-icon">${item.name}</span>
+        <a class="item-remove">remove</a>
+      `;
+    favList.appendChild(listItem);
+  }
+  setupApp() {
+      favouriteList = Storage.getFavouriteList();
+      this.populateFavourite(favouriteList);
+  }
+  populateFavourite(list) {
+     list.forEach(item => {
+         this.addFavouriteItem(item);
+     });
   }
 }
 //Local Storage
@@ -96,15 +112,20 @@ class Storage {
     let movies = JSON.parse(localStorage.getItem("movies"));
     return movies.find((movie) => movie.id === id);
   }
-  static saveFavouriteList() {
-    localStorage.setItem("favourite-item", JSON.stringify(favouriteList));
+  static saveFavouriteList(movies) {
+    localStorage.setItem("favourite-list", JSON.stringify(movies));
+  }
+  static getFavouriteList() {
+      return localStorage.getItem('favourite-list') ? JSON.parse(localStorage.getItem('favourite-list')) : [];
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI();
   const movies = new Movies();
-
+  
+  //Setup aap
+  ui.setupApp();
   //Get all movies
   movies
     .getMovies()

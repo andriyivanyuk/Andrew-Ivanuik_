@@ -87,7 +87,7 @@ img {
   column-gap: 15px;
 }
 .card-name {
-    font-size: 14px;
+  font-size: 14px;
 }
 .moovie-list {
   width: 30%;
@@ -100,15 +100,37 @@ img {
   right: 5px;
 }
 .favourite-color {
-    color: gold;
+  color: gold;
 }
 .gallery-title,
 .favourite-title {
   padding: 15px 0;
 }
-
-.red {
-   color: red;
+.favourite-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+.favourite-list__item {
+  position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.list-star {
+  position: absolute;
+  top: 18px;
+  color: gold;
+}
+.list-icon {
+  margin-left: 25px;
 }
 
-
+.item-remove {
+  color: palevioletred;
+  right: 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
