@@ -61,62 +61,54 @@ img {
 /* custom styles */
 
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-    padding: 15px;
-    max-width: 150px;
-    position: relative;
-  }
-  .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .movie-shell {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 25px;
-  }
-  .cards {
-      width: 70%;
-  }
-  .moovie-list {
-      width: 30%;
-  }
-
-/* .moovies-title {
-  text-align: left;
-  margin-top: 25px;
-  margin-bottom: 25px;
-}
-
-.moovie-cards {
-  display: flex;
-  flex-direction: row;
-  column-gap: 25px;
-  row-gap: 25px;
-  flex-wrap: wrap;
-  width: 85%;
-}
-
-.moovie-list {
-    margin-top: 25px;
-    width: 25%;
-}
-
-
-
-
-.name {
-    margin-top: 10px;
-}
-
-.main-star {
-    font-size: 30px;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-}
-.favourite-list__item {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  padding: 15px;
+  max-width: 150px;
   position: relative;
-} */
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.movie-shell {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 25px;
+}
+.cards {
+  width: 70%;
+}
+.cards-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 15px;
+  column-gap: 15px;
+}
+.card-name {
+    font-size: 14px;
+}
+.moovie-list {
+  width: 30%;
+}
+.main-star {
+  color: grey;
+  font-size: 30px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.favourite-color {
+    color: gold;
+}
+.gallery-title,
+.favourite-title {
+  padding: 15px 0;
+}
+
+.red {
+   color: red;
+}
+
+
