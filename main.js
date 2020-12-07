@@ -66,14 +66,12 @@ class UI {
       button.addEventListener("click", (event) => {
         event.target.classList.toggle("favourite-color");
         //Get movie from movies
-        let movieItem = { ...Storage.getMovie(id), amount: 1 };
+        let movieItem = Storage.getMovie(id);
         //Add movie to favourite list
         if (event.target.classList.contains("favourite-color")) {
           favouriteList = [...favouriteList, movieItem];
-          //Save movie in local storage
+          //Save list in local storage
           Storage.saveFavouriteList(favouriteList);
-          // Set favourite list values
-          //  this.setMovieValues(cart);
           //Display movie item
           this.addFavouriteItem(movieItem);
         } else {
