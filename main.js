@@ -9,18 +9,16 @@ const closeBtn = document.querySelector(".close");
 //Api
 const APIURL = "http://my-json-server.typicode.com/moviedb-tech/movies/list";
 
-const getMovieDetails = function (id) {
+function getMovieDetails(id) {
   fetch(`http://my-json-server.typicode.com/moviedb-tech/movies/list/${id}`)
     .then((response) => {
       const data = response.json();
       return data;
     })
     .then((data) => {
-      console.log(data);
+        console.log(data)
     });
 };
-
-getMovieDetails(5);
 
 let favouriteList = [];
 //Buttons
@@ -58,7 +56,7 @@ class UI {
         <img 
           src=${movie.img}
           alt="Avatar" />
-        <i class="fa fa-star main-star"></i>
+        <i class="fa fa-star main-star" data-id=${movie.id}></i>
         <div class="container">
           <h4 class="card-name"><b>${movie.name}</b></h4>
           <p>${movie.year}</p>
@@ -67,9 +65,11 @@ class UI {
         `;
     });
     cardsDOM.innerHTML = result;
-    movies.forEach(movie => {
-        
-    })
+  }
+
+  getItemBy(id) {
+    favouriteList = favouriteList.filter(item => item.id === id);
+    console.log(favouriteList);
   }
 
   createDetailsCard(cards) {
@@ -82,7 +82,7 @@ class UI {
           <p>${card.name}</p>
           <p>${card.description}</p>
           <p>${card.year}</p>
-          <p>genre</p>
+          <i class="fa fa-star main-star" data-id=${movie.id}></i>
         </div>
           `;
       modal.innerHTML = result;
@@ -126,18 +126,14 @@ class UI {
 
   displayModalPopup() {
       const cards = [...document.querySelectorAll('.card')];
-      cards.forEach(card => {
+      cards.forEach((card, idx) => {
+          let id = idx + 1;
           card.addEventListener('click', (event) => {
             if(!event.target.classList.contains('main-star')) {
                 modal.classList.toggle('display-modal');
             }
           })
       });
-    // cardsDOM.addEventListener("click", (event) => {
-    //     if(event.target.classList.contains('card')) {
-    //         modal.classList.toggle('display-modal');
-    //     }
-    // });
   }
 
   hideModalPopup() {
@@ -145,11 +141,6 @@ class UI {
         modal.classList.toggle('display-modal');
     });
   }
-
-  //   removeFavouriteItem(id) {
-  //     favouriteList = favouriteList.filter((item) => item.id !== id);
-  //     Storage.saveFavouriteList(favouriteList);
-  //   }
 
   addFavouriteItem(item) {
     const listItem = document.createElement("li");
