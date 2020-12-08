@@ -4,7 +4,8 @@ const favouriteItems = document.querySelector(".favourite-items");
 const favList = document.querySelector(".favourite-list");
 const cardsDOM = document.querySelector(".cards-wrapper");
 const modal = document.querySelector(".modal");
-const closeBtn = document.querySelector(".close");
+// const closeBtn = document.querySelector(".close");
+// const modalContent = document.querySelector('.modal-content');
 
 //Api
 const APIURL = "http://my-json-server.typicode.com/moviedb-tech/movies/list";
@@ -16,11 +17,12 @@ function getMovieDetails(id) {
       return data;
     })
     .then((data) => {
-        console.log(data)
+      Storage.savePopupInfo(data);
     });
-};
+}
 
 let favouriteList = [];
+let popupList = [];
 //Buttons
 let buttonsDOM = [];
 
@@ -68,26 +70,10 @@ class UI {
   }
 
   getItemBy(id) {
-    favouriteList = favouriteList.filter(item => item.id === id);
+    favouriteList = favouriteList.filter((item) => item.id === id);
     console.log(favouriteList);
   }
 
-  createDetailsCard(cards) {
-    let result = "";
-    cards.forEach((card) => {
-      result += `
-          <div class="modal-content">
-          <img src="${card.src}" alt="" />
-          <span class="close">&times;</span>
-          <p>${card.name}</p>
-          <p>${card.description}</p>
-          <p>${card.year}</p>
-          <i class="fa fa-star main-star" data-id=${movie.id}></i>
-        </div>
-          `;
-      modal.innerHTML = result;
-    });
-  }
   getStarButtons() {
     const starButtons = [...document.querySelectorAll(".main-star")];
     starButtons.forEach((button, idx) => {
@@ -125,21 +111,27 @@ class UI {
   }
 
   displayModalPopup() {
-      const cards = [...document.querySelectorAll('.card')];
-      cards.forEach((card, idx) => {
-          let id = idx + 1;
-          card.addEventListener('click', (event) => {
-            if(!event.target.classList.contains('main-star')) {
-                modal.classList.toggle('display-modal');
-            }
-          })
+    const cards = [...document.querySelectorAll(".card")];
+    cards.forEach((card, idx) => {
+      let id = idx + 1;
+      card.addEventListener("click", (event) => {
+        if (!event.target.classList.contains("main-star")) {
+            modal.classList.toggle('display-modal');
+          getMovieDetails(id);
+          let cardItem = Storage.getCardById();
+          this.addPopupInfo(cardItem);
+        }
       });
+    });
   }
 
   hideModalPopup() {
-    closeBtn.addEventListener("click", () => {
-        modal.classList.toggle('display-modal');
-    });
+    modal.addEventListener('click', (event) => {
+        if (event.target.classList.contains("close")) { 
+           modal.classList.toggle("display-modal");
+           console.log('test close');
+        }
+    })
   }
 
   addFavouriteItem(item) {
@@ -152,6 +144,20 @@ class UI {
       `;
     favList.appendChild(listItem);
   }
+
+  addPopupInfo(item) {
+    const modalContent = document.createElement("div");
+    modalContent.classList.add("modal-content");
+    modalContent.innerHTML = `
+       <img src="${item.img}" alt="" />
+        <span class="close">&times;</span>
+        <p>${item.name}</p>
+        <p>${item.director}</p>
+        <p>${item.description}</p>
+    `;
+    modal.appendChild(modalContent)
+  }
+
   setupApp() {
     // favouriteList = Storage.getFavouriteList();
     this.populateFavourite(favouriteList);
@@ -171,6 +177,13 @@ class Storage {
   static getMovie(id) {
     let movies = JSON.parse(localStorage.getItem("movies"));
     return movies.find((movie) => movie.id === id);
+  }
+  static savePopupInfo(card) {
+    localStorage.setItem("cards", JSON.stringify(card));
+  }
+  static getCardById() {
+    let card = JSON.parse(localStorage.getItem('cards'));
+    return card;
   }
   static saveFavouriteList(movies) {
     localStorage.setItem("favourite-list", JSON.stringify(movies));
@@ -198,11 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => {
       ui.getStarButtons();
       ui.getRemoveBtns();
-    })
-    .then(() => {
       ui.displayModalPopup();
-    })
-    .then(() => {
       ui.hideModalPopup();
     });
 });
