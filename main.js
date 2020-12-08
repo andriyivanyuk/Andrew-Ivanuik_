@@ -49,7 +49,6 @@ class UI {
           <p>${movie.year}</p>
         </div>
       </div>
-        
         `;
     });
     cardsDOM.innerHTML = result;
@@ -80,7 +79,23 @@ class UI {
       });
     });
   }
-  
+
+  getRemoveBtns() {
+    favList.addEventListener("click", (event) => {
+      if (event.target.classList.contains("item-remove")) {
+        let removeItem = event.target.parentElement;
+        favList.removeChild(removeItem);
+        console.log(favouriteList)
+        // this.removeFavouriteItem(id);
+      }
+    });
+  }
+
+//   removeFavouriteItem(id) {
+//     favouriteList = favouriteList.filter((item) => item.id !== id);
+//     Storage.saveFavouriteList(favouriteList);
+//   }
+
   addFavouriteItem(item) {
     const listItem = document.createElement("li");
     listItem.classList.add("favourite-list__item");
@@ -92,13 +107,14 @@ class UI {
     favList.appendChild(listItem);
   }
   setupApp() {
-      favouriteList = Storage.getFavouriteList();
-      this.populateFavourite(favouriteList);
+    // favouriteList = Storage.getFavouriteList();
+    this.populateFavourite(favouriteList);
+    // favouriteList = Storage.getFavouriteList();
   }
   populateFavourite(list) {
-     list.forEach(item => {
-         this.addFavouriteItem(item);
-     });
+    list.forEach((item) => {
+      this.addFavouriteItem(item);
+    });
   }
 }
 //Local Storage
@@ -114,14 +130,16 @@ class Storage {
     localStorage.setItem("favourite-list", JSON.stringify(movies));
   }
   static getFavouriteList() {
-      return localStorage.getItem('favourite-list') ? JSON.parse(localStorage.getItem('favourite-list')) : [];
+    return localStorage.getItem("favourite-list")
+      ? JSON.parse(localStorage.getItem("favourite-list"))
+      : [];
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const ui = new UI();
   const movies = new Movies();
-  
+
   //Setup aap
   ui.setupApp();
   //Get all movies
@@ -133,5 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(() => {
       ui.getStarButtons();
+      ui.getRemoveBtns();
     });
 });
