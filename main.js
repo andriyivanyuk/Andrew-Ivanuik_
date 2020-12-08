@@ -3,9 +3,24 @@ const favListDOM = document.querySelector(".favourite-list");
 const favouriteItems = document.querySelector(".favourite-items");
 const favList = document.querySelector(".favourite-list");
 const cardsDOM = document.querySelector(".cards-wrapper");
+const modal = document.querySelector(".modal");
+const closeBtn = document.querySelector(".close");
 
 //Api
 const APIURL = "http://my-json-server.typicode.com/moviedb-tech/movies/list";
+
+const getMovieDetails = function (id) {
+  fetch(`http://my-json-server.typicode.com/moviedb-tech/movies/list/${id}`)
+    .then((response) => {
+      const data = response.json();
+      return data;
+    })
+    .then((data) => {
+      console.log(data);
+    });
+};
+
+getMovieDetails(5);
 
 let favouriteList = [];
 //Buttons
@@ -52,10 +67,29 @@ class UI {
         `;
     });
     cardsDOM.innerHTML = result;
+    movies.forEach(movie => {
+        
+    })
+  }
+
+  createDetailsCard(cards) {
+    let result = "";
+    cards.forEach((card) => {
+      result += `
+          <div class="modal-content">
+          <img src="${card.src}" alt="" />
+          <span class="close">&times;</span>
+          <p>${card.name}</p>
+          <p>${card.description}</p>
+          <p>${card.year}</p>
+          <p>genre</p>
+        </div>
+          `;
+      modal.innerHTML = result;
+    });
   }
   getStarButtons() {
     const starButtons = [...document.querySelectorAll(".main-star")];
-    buttonsDOM = starButtons;
     starButtons.forEach((button, idx) => {
       let id = idx + 1;
       let inFavList = favouriteList.find((item) => item.id === id);
@@ -85,16 +119,37 @@ class UI {
       if (event.target.classList.contains("item-remove")) {
         let removeItem = event.target.parentElement;
         favList.removeChild(removeItem);
-        console.log(favouriteList)
-        // this.removeFavouriteItem(id);
+        console.log(favouriteList);
       }
     });
   }
 
-//   removeFavouriteItem(id) {
-//     favouriteList = favouriteList.filter((item) => item.id !== id);
-//     Storage.saveFavouriteList(favouriteList);
-//   }
+  displayModalPopup() {
+      const cards = [...document.querySelectorAll('.card')];
+      cards.forEach(card => {
+          card.addEventListener('click', (event) => {
+            if(!event.target.classList.contains('main-star')) {
+                modal.classList.toggle('display-modal');
+            }
+          })
+      });
+    // cardsDOM.addEventListener("click", (event) => {
+    //     if(event.target.classList.contains('card')) {
+    //         modal.classList.toggle('display-modal');
+    //     }
+    // });
+  }
+
+  hideModalPopup() {
+    closeBtn.addEventListener("click", () => {
+        modal.classList.toggle('display-modal');
+    });
+  }
+
+  //   removeFavouriteItem(id) {
+  //     favouriteList = favouriteList.filter((item) => item.id !== id);
+  //     Storage.saveFavouriteList(favouriteList);
+  //   }
 
   addFavouriteItem(item) {
     const listItem = document.createElement("li");
@@ -152,5 +207,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => {
       ui.getStarButtons();
       ui.getRemoveBtns();
+    })
+    .then(() => {
+      ui.displayModalPopup();
+    })
+    .then(() => {
+      ui.hideModalPopup();
     });
 });
