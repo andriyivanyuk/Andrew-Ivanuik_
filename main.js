@@ -5,7 +5,7 @@ const favList = document.querySelector(".favourite-list");
 const cardsDOM = document.querySelector(".cards-wrapper");
 const modal = document.querySelector(".modal");
 // const closeBtn = document.querySelector(".close");
-// const modalContent = document.querySelector('.modal-content');
+const modalContent = document.querySelector('.modal-content');
 
 //Api
 const APIURL = "http://my-json-server.typicode.com/moviedb-tech/movies/list";
@@ -17,7 +17,26 @@ function getMovieDetails(id) {
       return data;
     })
     .then((data) => {
-      Storage.savePopupInfo(data);
+      let arr = [];
+      arr.push(data);
+      arr.forEach((item) => {
+        Storage.savePopupInfo(item);
+      });
+      console.log(arr);
+      return arr;
+    })
+    .then((arr) => {
+      arr = JSON.parse(localStorage.getItem("cards"));
+      Storage.getPopupInfo(arr);
+      modalContent.innerHTML = `
+         <img src="${arr.img}" alt="" />
+          <span class="close">&times;</span>
+          <p>${arr.name}</p>
+          <p>${arr.director}</p>
+          <p>${arr.description}</p>
+      `;
+      modal.appendChild(modalContent);
+      console.log(arr);
     });
 }
 
@@ -116,22 +135,24 @@ class UI {
       let id = idx + 1;
       card.addEventListener("click", (event) => {
         if (!event.target.classList.contains("main-star")) {
-            modal.classList.toggle('display-modal');
+          modal.classList.toggle("display-modal");
+          //   let cardItem = Storage.getPopupInfo(id);
+          //   console.log(cardItem)
           getMovieDetails(id);
-          let cardItem = Storage.getCardById();
-          this.addPopupInfo(cardItem);
+
+          //   this.addPopupInfo();
         }
       });
     });
   }
 
   hideModalPopup() {
-    modal.addEventListener('click', (event) => {
-        if (event.target.classList.contains("close")) { 
-           modal.classList.toggle("display-modal");
-           console.log('test close');
-        }
-    })
+    modal.addEventListener("click", (event) => {
+      if (event.target.classList.contains("close")) {
+        modal.classList.toggle("display-modal");
+        console.log("test close");
+      }
+    });
   }
 
   addFavouriteItem(item) {
@@ -155,7 +176,7 @@ class UI {
         <p>${item.director}</p>
         <p>${item.description}</p>
     `;
-    modal.appendChild(modalContent)
+    modal.appendChild(modalContent);
   }
 
   setupApp() {
@@ -181,8 +202,8 @@ class Storage {
   static savePopupInfo(card) {
     localStorage.setItem("cards", JSON.stringify(card));
   }
-  static getCardById() {
-    let card = JSON.parse(localStorage.getItem('cards'));
+  static getPopupInfo(card) {
+    card = JSON.parse(localStorage.getItem("cards"));
     return card;
   }
   static saveFavouriteList(movies) {
