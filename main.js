@@ -4,46 +4,16 @@ const favouriteItems = document.querySelector(".favourite-items");
 const favList = document.querySelector(".favourite-list");
 const cardsDOM = document.querySelector(".cards-wrapper");
 const modal = document.querySelector(".modal");
-// const closeBtn = document.querySelector(".close");
 const modalContent = document.querySelector('.modal-content');
+
+let favouriteList = [];
+let popupList = [];
+let buttonsDOM = [];
 
 //Api
 const APIURL = "http://my-json-server.typicode.com/moviedb-tech/movies/list";
 
-function getMovieDetails(id) {
-  fetch(`http://my-json-server.typicode.com/moviedb-tech/movies/list/${id}`)
-    .then((response) => {
-      const data = response.json();
-      return data;
-    })
-    .then((data) => {
-      let arr = [];
-      arr.push(data);
-      arr.forEach((item) => {
-        Storage.savePopupInfo(item);
-      });
-      console.log(arr);
-      return arr;
-    })
-    .then((arr) => {
-      arr = JSON.parse(localStorage.getItem("cards"));
-      Storage.getPopupInfo(arr);
-      modalContent.innerHTML = `
-         <img src="${arr.img}" alt="" />
-          <span class="close">&times;</span>
-          <p>${arr.name}</p>
-          <p>${arr.director}</p>
-          <p>${arr.description}</p>
-      `;
-      modal.appendChild(modalContent);
-      console.log(arr);
-    });
-}
 
-let favouriteList = [];
-let popupList = [];
-//Buttons
-let buttonsDOM = [];
 
 //Getting movies
 class Movies {
@@ -63,6 +33,29 @@ class Movies {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  getMovieDetails(id) {
+    fetch(`http://my-json-server.typicode.com/moviedb-tech/movies/list/${id}`)
+      .then((response) => {
+        const data = response.json();
+        return data;
+      })
+      .then((data) => {
+        let arr = [];
+        arr.push(data);
+        arr.forEach((item) => {
+          Storage.savePopupInfo(item);
+        });
+        console.log(arr);
+        return arr;
+      })
+      .then((item) => {
+        item = JSON.parse(localStorage.getItem("cards"));
+        Storage.getPopupInfo(item);
+        const ui = new UI();
+        ui.addPopupInfo(item);
+      });
   }
 }
 //Display movies
@@ -136,11 +129,8 @@ class UI {
       card.addEventListener("click", (event) => {
         if (!event.target.classList.contains("main-star")) {
           modal.classList.toggle("display-modal");
-          //   let cardItem = Storage.getPopupInfo(id);
-          //   console.log(cardItem)
-          getMovieDetails(id);
-
-          //   this.addPopupInfo();
+          const details = new Movies();
+          details.getMovieDetails(id);
         }
       });
     });
@@ -167,16 +157,15 @@ class UI {
   }
 
   addPopupInfo(item) {
-    const modalContent = document.createElement("div");
-    modalContent.classList.add("modal-content");
     modalContent.innerHTML = `
-       <img src="${item.img}" alt="" />
-        <span class="close">&times;</span>
-        <p>${item.name}</p>
-        <p>${item.director}</p>
-        <p>${item.description}</p>
-    `;
-    modal.appendChild(modalContent);
+    <img src="${item.img}" alt="" />
+     <span class="close">&times;</span>
+     <p>${item.name}</p>
+     <p>${item.director}</p>
+     <p>${item.description}</p>
+ `;
+ modal.appendChild(modalContent);
+    
   }
 
   setupApp() {

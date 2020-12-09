@@ -157,6 +157,7 @@ img {
   border: 1px solid #888;
   width: 80%;
   position: relative;
+  transition: all .5s ease-out;
 }
 
 .modal-content img {
