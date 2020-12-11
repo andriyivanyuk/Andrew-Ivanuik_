@@ -4,16 +4,17 @@ const favouriteItems = document.querySelector(".favourite-items");
 const favList = document.querySelector(".favourite-list");
 const cardsDOM = document.querySelector(".cards-wrapper");
 const modal = document.querySelector(".modal");
-const modalContent = document.querySelector('.modal-content');
+const modalContent = document.querySelector(".modal-content");
+const genreSelect = document.querySelector("#genre");
 
 let favouriteList = [];
 let popupList = [];
 let buttonsDOM = [];
 
+let categoryGroup = [];
+
 //Api
 const APIURL = "http://my-json-server.typicode.com/moviedb-tech/movies/list";
-
-
 
 //Getting movies
 class Movies {
@@ -22,6 +23,11 @@ class Movies {
       let result = await fetch(APIURL);
       let data = await result.json();
       let movies = data;
+      const ui = new UI();
+      ui.getAllGenres(movies);
+      //   getAllGenres();
+
+      console.log(movies);
       movies = movies.map((item) => {
         const name = item.name;
         const year = item.year;
@@ -62,7 +68,6 @@ class Movies {
 class UI {
   // <i class="fa fa-star main-star" data-id=${movie.id}></i>
   displayMovies(movies) {
-    console.log(movies);
     let result = "";
     movies.forEach((movie) => {
       result += `
@@ -159,13 +164,13 @@ class UI {
   addPopupInfo(item) {
     modalContent.innerHTML = `
     <img src="${item.img}" alt="" />
+    <i class="fa fa-star detail-star"></i>
      <span class="close">&times;</span>
      <p>${item.name}</p>
      <p>${item.director}</p>
      <p>${item.description}</p>
  `;
- modal.appendChild(modalContent);
-    
+    modal.appendChild(modalContent);
   }
 
   setupApp() {
@@ -178,6 +183,22 @@ class UI {
       this.addFavouriteItem(item);
     });
   }
+
+  getAllGenres(movies) {
+    genreSelect.addEventListener("change", (event) => {
+      movies.filter((movie) => {
+         if(movie) {
+            movie.genres.forEach(item => {
+               if(item === event.target.value) {
+                   
+               }
+            });
+         }
+      });
+    });
+  }
+
+  sortMoviesByGenre() {}
 }
 //Local Storage
 class Storage {
@@ -221,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => {
       ui.getStarButtons();
       ui.getRemoveBtns();
+      ui.sortMoviesByGenre();
       ui.displayModalPopup();
       ui.hideModalPopup();
     });

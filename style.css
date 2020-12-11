@@ -128,6 +128,14 @@ img {
   margin-left: 25px;
 }
 
+.detail-star {
+  font-size: 25px;
+}
+
+.change-details-star {
+  color: gold;
+}
+
 .item-remove {
   color: palevioletred;
   right: 15px;
