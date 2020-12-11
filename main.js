@@ -23,18 +23,15 @@ class Movies {
       let result = await fetch(APIURL);
       let data = await result.json();
       let movies = data;
-      const ui = new UI();
-      ui.getAllGenres(movies);
-      //   getAllGenres();
-
+      
       console.log(movies);
-      movies = movies.map((item) => {
-        const name = item.name;
-        const year = item.year;
-        const id = item.id;
-        const img = item.img;
-        return { name, year, id, img };
-      });
+    //   movies = movies.map((item) => {
+    //     const name = item.name;
+    //     const year = item.year;
+    //     const id = item.id;
+    //     const img = item.img;
+    //     return { name, year, id, img };
+    //   });
       return movies;
     } catch (error) {
       console.log(error);
@@ -184,21 +181,23 @@ class UI {
     });
   }
 
-  getAllGenres(movies) {
+  filterByGenres(movies) {
+    const cards = [...document.querySelectorAll(".card")];
     genreSelect.addEventListener("change", (event) => {
       movies.filter((movie) => {
-         if(movie) {
-            movie.genres.forEach(item => {
-               if(item === event.target.value) {
-                   
-               }
-            });
-         }
+        movie.genres.forEach((genre) => {
+          if (genre === event.target.value) {
+            console.log(movie)
+            return movie;
+          }
+        });
       });
     });
+    cards.find((item) => {
+        const dataId = item.children[1].attributes[1].value;
+        console.log(dataId)
+    })
   }
-
-  sortMoviesByGenre() {}
 }
 //Local Storage
 class Storage {
@@ -237,12 +236,12 @@ document.addEventListener("DOMContentLoaded", () => {
     .getMovies()
     .then((movies) => {
       ui.displayMovies(movies);
+      ui.filterByGenres(movies);
       Storage.saveMovies(movies);
     })
     .then(() => {
       ui.getStarButtons();
       ui.getRemoveBtns();
-      ui.sortMoviesByGenre();
       ui.displayModalPopup();
       ui.hideModalPopup();
     });
